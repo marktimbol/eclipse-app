@@ -12,8 +12,8 @@ import React, {
 } from 'react-native';
 
 
-var SearchPackage = require('./components/ios/SearchPackage');
-var Packages = require('./components/ios/Packages');
+var SearchPackage = require('./common/components/SearchPackage');
+var Packages = require('./common/components/Packages');
 
 class EclipseTourism extends Component {
 	constructor(props) {
@@ -23,6 +23,10 @@ class EclipseTourism extends Component {
 	render() {
 		return (
 			<NavigatorIOS
+				barTintColor={'#4d98e4'}
+				tintColor={'white'}
+				titleTextColor={'white'}
+				shadowHidden={true}
 				initialRoute={{
 					title: 'Eclipse Tourism',
 					component: Packages,
@@ -82,5 +86,4 @@ const styles = StyleSheet.create({
 })
 
 AppRegistry.registerComponent('EclipseTourism', () => EclipseTourism);
-module.exports = EclipseTourism;
 

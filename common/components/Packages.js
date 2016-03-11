@@ -5,9 +5,11 @@ import React, {
 	View,
 	Text,
 	ListView,
+	ScrollView,
 	TouchableHighlight,
 	Image,
 	StyleSheet,
+	ActivityIndicatorIOS,
 } from 'react-native';
 
 var Package = require('./Package');
@@ -21,7 +23,8 @@ class Packages extends Component {
 		this.state = {
 			packages: new ListView.DataSource({
 				rowHasChanged: (row1, row2) => row1 !== row2
-			})
+			}),
+			loaded: false
 		}
 	}
 
@@ -35,7 +38,8 @@ class Packages extends Component {
 			.then( (response) => response.json() )
 			.then( (responseData) => {
 				this.setState({
-					packages: this.state.packages.cloneWithRows(responseData)
+					packages: this.state.packages.cloneWithRows(responseData),
+					loaded: true,
 				})
 			})
 			.done();
@@ -43,9 +47,9 @@ class Packages extends Component {
 
 	renderRow(currentPackage, sectionID, rowID) {
 		return (	
-			<View style={styles.container}>
+			<View>
 				<TouchableHighlight 
-					underlayColor={'#328fcc'}
+					underlayColor={'#e3f2fd'}
 					onPress={ this.showPackage.bind(this, currentPackage) }>
 					<View style={styles.row}>
 						<Image source={{ uri: remoteImagePath + currentPackage.photos[0].path }} 
@@ -61,6 +65,24 @@ class Packages extends Component {
 		)	
 	}
 
+	renderHeader() {
+		return (
+			<View style={styles.pageTitleContainer}>
+				<Text style={styles.pageTitle}>Available Packages</Text>
+			</View>
+		)
+	}
+
+	renderFooter() {
+		return (
+			<View style={styles.footerContainer}>
+				<Text style={styles.footerText}>
+					You have seen them all, wanna talk to us now?
+				</Text>
+			</View>
+		)
+	}
+
 	showPackage(currentPackage) {
 		this.props.navigator.push({
 			title: currentPackage.name,
@@ -69,23 +91,60 @@ class Packages extends Component {
 		});
 	}
 
+	showLoading() {
+		return (
+			<View style={styles.loading}>
+				<ActivityIndicatorIOS
+					animating={true} size={'large'} />
+			</View>
+		)
+	}
+
 	render() {
+
+		if( ! this.state.loaded ) {
+			return this.showLoading();
+		}
+
 		return (
 			<ListView
 				dataSource={this.state.packages}
-				renderRow={this.renderRow.bind(this)} />
+				renderRow={this.renderRow.bind(this)}
+				initialListSize={5}
+				renderSectionHeader={this.renderHeader}
+				renderFooter={this.renderFooter}
+				style={styles.listView} />
 		);
 	}
 }
 
 const styles = StyleSheet.create({
 
-	container: {
-		marginVertical: 5,
+	pageTitleContainer: {
+		paddingVertical: 5,
+		backgroundColor: '#3471ae',
+	},
+
+	pageTitle: {
+		color: 'white',
+		textAlign: 'center',
+		fontSize: 10,
+	},	
+
+	loading: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+
+	listView: {
+		marginTop: 64,
 	},
 
 	row: {
 		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
 		padding: 5,
 	},
 
@@ -111,12 +170,25 @@ const styles = StyleSheet.create({
 
 	packageSubtitle: {
 		fontSize: 10,
+		color: '#757575',
 	},
 
 	packagePrice: {
 		fontSize: 10,
 		fontWeight: 'bold',
 		marginTop: 10,
+	},
+
+	footerContainer: {
+		padding: 20,
+		marginTop: 20,
+		backgroundColor: '#3471ae',
+	},
+
+	footerText: {
+		color: 'white',
+		fontSize: 10,
+		textAlign: 'center',
 	}
 });
 

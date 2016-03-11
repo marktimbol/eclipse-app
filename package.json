@@ -7,6 +7,6 @@
   },
   "dependencies": {
     "react-native": "^0.21.0",
-    "react-native-htmltext": "^0.1.2"
+    "react-native-htmlview": "^0.2.0"
   }
 }

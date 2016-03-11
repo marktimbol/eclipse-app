@@ -11,7 +11,7 @@ import React, {
 } from 'react-native';
 
 var Packages = require('./Packages');
-var Button = require('./../Button');
+var Button = require('./Button');
 
 class SearchPackage extends Component {
 	constructor(props) {

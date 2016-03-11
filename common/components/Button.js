@@ -11,7 +11,7 @@ class Button extends Component {
 		return (
 			<TouchableHighlight 
 				onPress={this.props.onPress} 
-				underlayColor={'#333'}
+				underlayColor={'#3471ae'}
 				style={styles.button}>
 				<Text style={styles.buttonText}>{ this.props.label }</Text>
 			</TouchableHighlight>
@@ -22,8 +22,8 @@ class Button extends Component {
 const styles = StyleSheet.create({
 	button: {
 		flex: 1,
-		backgroundColor: '#328fcc',
-		borderRadius: 3,
+		backgroundColor: '#4d98e4',
+		borderRadius: 2,
 		height: 40,
 		paddingHorizontal: 5,
 		alignItems: 'center',
