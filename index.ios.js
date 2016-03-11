@@ -29,7 +29,7 @@ class EclipseTourism extends Component {
 				shadowHidden={true}
 				initialRoute={{
 					title: 'Eclipse Tourism',
-					component: Packages,
+					component: SearchPackage,
 					passProps: { },
 				}} style={styles.routes} />
 		)
