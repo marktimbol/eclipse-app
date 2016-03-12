@@ -10,7 +10,7 @@ import React, {
 
 var Button = require('./Button');
 var HTMLView = require('react-native-htmlview')
-var BookPackage = require('./BookPackage');
+var BookPackageForm = require('./BookPackage');
 
 var remoteImagePath = 'https://marktimbol.com/images/uploads/';
 
@@ -18,16 +18,12 @@ class Package extends Component {
 
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			boooking: 'no'
-		}
 	}
 
 	handleBookPackage(selectedPackage) {
 		this.props.navigator.push({
 			title: 'Booking Request',
-			component: BookPackage,
+			component: BookPackageForm,
 			passProps: { selectedPackage: selectedPackage }
 		});
 	}
@@ -35,7 +31,7 @@ class Package extends Component {
 	render() {
 		var packageInformation = this.props.selectedPackage.information.map((information) => {
 			return (
-				<View>
+				<View key={information.id}>
 					<View style={styles.separator} />
 					<Text style={styles.packageInformationText}>
 						{ information.title } { information.description }

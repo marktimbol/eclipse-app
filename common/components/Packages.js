@@ -13,6 +13,9 @@ import React, {
 } from 'react-native';
 
 var Package = require('./Package');
+var BookPackageForm = require('./BookPackage');
+
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var remoteImagePath = 'https://marktimbol.com/images/uploads/';
 
@@ -24,12 +27,19 @@ class Packages extends Component {
 			packages: new ListView.DataSource({
 				rowHasChanged: (row1, row2) => row1 !== row2
 			}),
-			loaded: false
+			loaded: false,
+
+			addIcon: null,
 		}
 	}
 
 	componentDidMount() {
 		this.fetchPackages();
+	}
+
+	componentWillMount() {
+		Icon.getImageSource('add', 24)
+			.then( (source) => this.setState({ addIcon: source }) );
 	}
 
 	fetchPackages() {
@@ -47,16 +57,15 @@ class Packages extends Component {
 
 	renderRow(currentPackage, sectionID, rowID) {
 		return (	
-			<View>
+			<View style={styles.item} key={rowID}>
 				<TouchableHighlight 
 					underlayColor={'#e3f2fd'}
 					onPress={ this.showPackage.bind(this, currentPackage) }>
-					<View style={styles.row}>
+					<View>
 						<Image source={{ uri: remoteImagePath + currentPackage.photos[0].path }} 
 							style={styles.thumbnail }/>
 						<View style={styles.packageContent}>
 							<Text style={styles.packageName} numberOfLines={1}>{ currentPackage.name }</Text>
-							<Text style={styles.packageSubtitle} numberOfLines={1}>{ currentPackage.subtitle }</Text>
 							<Text style={styles.packagePrice}>AED { currentPackage.adult_price }</Text>
 						</View>
 					</View>
@@ -87,7 +96,17 @@ class Packages extends Component {
 		this.props.navigator.push({
 			title: currentPackage.name,
 			component: Package,
+			rightButtonIcon: this.state.addIcon,
+			onRightButtonPress: this.bookPackage.bind(this, currentPackage),
 			passProps: { selectedPackage: currentPackage}
+		});
+	}
+
+	bookPackage(selectedPackage) {
+		this.props.navigator.push({
+			title: 'Booking Request',
+			component: BookPackageForm,
+			passProps: { selectedPackage: selectedPackage }
 		});
 	}
 
@@ -106,6 +125,10 @@ class Packages extends Component {
 			return this.showLoading();
 		}
 
+		if( ! this.state.addIcon ) {
+			return false;
+		}
+
 		return (
 			<ListView
 				dataSource={this.state.packages}
@@ -113,7 +136,7 @@ class Packages extends Component {
 				initialListSize={5}
 				renderSectionHeader={this.renderHeader}
 				renderFooter={this.renderFooter}
-				style={styles.listView} />
+				contentContainerStyle={styles.listView} />
 		);
 	}
 }
@@ -121,6 +144,7 @@ class Packages extends Component {
 const styles = StyleSheet.create({
 
 	pageTitleContainer: {
+		width: 1000,
 		paddingVertical: 5,
 		backgroundColor: '#3471ae',
 	},
@@ -138,13 +162,28 @@ const styles = StyleSheet.create({
 	},
 
 	listView: {
+		justifyContent: 'center',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		backgroundColor: '#f4f4f4',
 		marginTop: 64,
 	},
 
-	row: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
+	item: {
+		width: 150,
+		height: 180,
+		margin: 5,
+		shadowColor: '#333',
+		shadowOpacity: 0.1,
+		shadowRadius: 3,
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		backgroundColor: 'white',
+	},
+
+	packageContent: {
 		padding: 5,
 	},
 
@@ -153,19 +192,13 @@ const styles = StyleSheet.create({
 		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 
-	packageContent: {
-		flex: 1,
-	},
-
 	thumbnail: {
-		width: 80,
-		height: 80,
-		borderRadius: 2,
-		marginRight: 10,
+		width: 150,
+		height: 130,
 	},
 
 	packageName: {
-		fontSize: 12,
+		fontSize: 10,
 	},
 
 	packageSubtitle: {
@@ -174,12 +207,13 @@ const styles = StyleSheet.create({
 	},
 
 	packagePrice: {
-		fontSize: 10,
+		fontSize: 8,
 		fontWeight: 'bold',
 		marginTop: 10,
 	},
 
 	footerContainer: {
+		width: 1000,
 		padding: 20,
 		marginTop: 20,
 		backgroundColor: '#3471ae',
@@ -193,4 +227,3 @@ const styles = StyleSheet.create({
 });
 
 module.exports = Packages;
-

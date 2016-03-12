@@ -11,16 +11,31 @@ import React, {
 	TouchableHighlight
 } from 'react-native';
 
-
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var SearchPackage = require('./common/components/SearchPackage');
 var Packages = require('./common/components/Packages');
 
 class EclipseTourism extends Component {
+	
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			searchIcon: null,
+		}
+	}
+
+	componentWillMount() {
+    	Icon.getImageSource('search', 24)
+    		.then( (source) => this.setState({ searchIcon: source }) );
 	}
 
 	render() {
+
+		if( ! this.state.searchIcon ) {
+			return false;
+		}
+
 		return (
 			<NavigatorIOS
 				barTintColor={'#4d98e4'}
@@ -29,7 +44,8 @@ class EclipseTourism extends Component {
 				shadowHidden={true}
 				initialRoute={{
 					title: 'Eclipse Tourism',
-					component: SearchPackage,
+					component: Packages,
+					rightButtonIcon: this.state.searchIcon,
 					passProps: { },
 				}} style={styles.routes} />
 		)
