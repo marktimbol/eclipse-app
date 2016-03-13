@@ -6,11 +6,14 @@ import React, {
 	Image,
 	StyleSheet,
 	ScrollView,
+	Dimensions,
 } from 'react-native';
 
+var PageTitle = require('./PageTitle');
 var Button = require('./Button');
 var HTMLView = require('react-native-htmlview')
 var BookPackageForm = require('./BookPackage');
+var PackageTicket = require('./PackageTicket');
 
 var remoteImagePath = 'https://marktimbol.com/images/uploads/';
 
@@ -29,6 +32,20 @@ class Package extends Component {
 	}
 
 	render() {
+		var {height, width} = Dimensions.get('window');
+		var featuredImageStyle = {
+			width: width
+		}
+
+		var ticketOptions = null;
+		if( this.props.selectedPackage.has_ticket_option ) {
+			ticketOptions = this.props.selectedPackage.tickets.map( (ticket) => {
+				return (
+					<PackageTicket key={ticket.id} ticket={ticket} />
+				)
+			});
+		}
+
 		var packageInformation = this.props.selectedPackage.information.map((information) => {
 			return (
 				<View key={information.id}>
@@ -42,12 +59,10 @@ class Package extends Component {
 
 		return (
 			<View style={styles.container}>
-				<View style={styles.pageTitleContainer}>
-					<Text style={styles.pageTitle}>{ this.props.selectedPackage.subtitle }</Text>
-				</View>
+				<PageTitle title={ this.props.selectedPackage.subtitle } style={{ marginTop: 64 }} />
 				<ScrollView style={styles.scrollView}>
 					<Image source={{ uri: remoteImagePath + this.props.selectedPackage.photos[0].path }} 
-						style={styles.featuredImage} />
+						style={[styles.featuredImage, featuredImageStyle ]} />
 					<View style={styles.pageContent}>
 						<View style={styles.packageInformation}>
 							<Text style={styles.packageInformationText}>
@@ -58,6 +73,10 @@ class Package extends Component {
 								Child Price: AED { this.props.selectedPackage.child_price }
 							</Text>
 							{ packageInformation }
+						</View>
+
+						<View style={styles.tickets}>
+							{ ticketOptions }
 						</View>
 
 						<View style={styles.bookPackage}>
@@ -99,21 +118,10 @@ const htmlView = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
+
 	container: {
 		flex: 1,
 	},
-
-	pageTitleContainer: {
-		paddingVertical: 5,
-		marginTop: 64,
-		backgroundColor: '#3471ae',
-	},
-
-	pageTitle: {
-		color: 'white',
-		textAlign: 'center',
-		fontSize: 10,
-	},	
 
 	separator: {
 		borderBottomColor: '#ddd',
@@ -129,9 +137,7 @@ const styles = StyleSheet.create({
 	},
 
 	featuredImage: {
-		width: 380,
 		height: 300,
-		flex: 1,
 	},
 
 	packageInformation: {
@@ -144,6 +150,11 @@ const styles = StyleSheet.create({
 
 	packageInformationText: {
 		padding: 10,
+	},
+
+	tickets: {
+		flexDirection: 'row',
+		flexWrap: 'wrap',
 	},
 
 	bookPackage: {

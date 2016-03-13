@@ -8,6 +8,7 @@ import React, {
 	StyleSheet,
 } from 'react-native';
 
+var PageTitle = require('./PageTitle');
 var TextBox = require('./TextBox');
 var TextArea = require('./TextArea');
 var Button = require('./Button');
@@ -31,9 +32,7 @@ class BookPackage extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<View style={styles.pageTitleContainer}>
-					<Text style={styles.pageTitle}>You are requesting to book { this.props.selectedPackage.name }.</Text>
-				</View>
+				<PageTitle title={'You are requesting to book ' + this.props.selectedPackage.name } />
 
 				<View style={styles.form}>
 					<View style={styles.formControl}>
@@ -70,17 +69,6 @@ const styles = StyleSheet.create({
 	container: {
 		marginTop: 64,
 	},
-
-	pageTitleContainer: {
-		paddingVertical: 5,
-		backgroundColor: '#3471ae',
-	},
-
-	pageTitle: {
-		color: 'white',
-		textAlign: 'center',
-		fontSize: 10,
-	},	
 
 	form: {
 		margin: 10,

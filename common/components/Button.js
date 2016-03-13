@@ -22,7 +22,7 @@ class Button extends Component {
 const styles = StyleSheet.create({
 	button: {
 		flex: 1,
-		backgroundColor: '#4d98e4',
+		backgroundColor: '#2196f3',
 		borderRadius: 2,
 		height: 40,
 		paddingHorizontal: 5,

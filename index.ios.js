@@ -38,7 +38,7 @@ class EclipseTourism extends Component {
 
 		return (
 			<NavigatorIOS
-				barTintColor={'#4d98e4'}
+				barTintColor={'#2196f3'}
 				tintColor={'white'}
 				titleTextColor={'white'}
 				shadowHidden={true}

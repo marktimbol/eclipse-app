@@ -10,14 +10,17 @@ import React, {
 	Image,
 	StyleSheet,
 	ActivityIndicatorIOS,
+	Dimensions,
 } from 'react-native';
 
+var PageTitle = require('./PageTitle');
 var Package = require('./Package');
 var BookPackageForm = require('./BookPackage');
-
 var Icon = require('react-native-vector-icons/MaterialIcons');
+var Card = require('./Card');
 
 var remoteImagePath = 'https://marktimbol.com/images/uploads/';
+var {height, width} = Dimensions.get('window');
 
 class Packages extends Component {
 	constructor(props) {
@@ -28,7 +31,6 @@ class Packages extends Component {
 				rowHasChanged: (row1, row2) => row1 !== row2
 			}),
 			loaded: false,
-
 			addIcon: null,
 		}
 	}
@@ -44,6 +46,7 @@ class Packages extends Component {
 
 	fetchPackages() {
 		var url = 'https://marktimbol.com/api/v1/packages/';
+
 		fetch(url)
 			.then( (response) => response.json() )
 			.then( (responseData) => {
@@ -57,28 +60,15 @@ class Packages extends Component {
 
 	renderRow(currentPackage, sectionID, rowID) {
 		return (	
-			<View style={styles.item} key={rowID}>
-				<TouchableHighlight 
-					underlayColor={'#e3f2fd'}
-					onPress={ this.showPackage.bind(this, currentPackage) }>
-					<View>
-						<Image source={{ uri: remoteImagePath + currentPackage.photos[0].path }} 
-							style={styles.thumbnail }/>
-						<View style={styles.packageContent}>
-							<Text style={styles.packageName} numberOfLines={1}>{ currentPackage.name }</Text>
-							<Text style={styles.packagePrice}>AED { currentPackage.adult_price }</Text>
-						</View>
-					</View>
-				</TouchableHighlight>
-			</View>
+			<Card key={rowID}
+				onPress={this.showPackage.bind(this, currentPackage) }
+				currentPackage={currentPackage} />
 		)	
 	}
 
 	renderHeader() {
 		return (
-			<View style={styles.pageTitleContainer}>
-				<Text style={styles.pageTitle}>Available Packages</Text>
-			</View>
+			<PageTitle title={'Available Packages'} />
 		)
 	}
 
@@ -120,7 +110,6 @@ class Packages extends Component {
 	}
 
 	render() {
-
 		if( ! this.state.loaded ) {
 			return this.showLoading();
 		}
@@ -143,18 +132,6 @@ class Packages extends Component {
 
 const styles = StyleSheet.create({
 
-	pageTitleContainer: {
-		width: 1000,
-		paddingVertical: 5,
-		backgroundColor: '#3471ae',
-	},
-
-	pageTitle: {
-		color: 'white',
-		textAlign: 'center',
-		fontSize: 10,
-	},	
-
 	loading: {
 		flex: 1,
 		alignItems: 'center',
@@ -169,54 +146,11 @@ const styles = StyleSheet.create({
 		marginTop: 64,
 	},
 
-	item: {
-		width: 150,
-		height: 180,
-		margin: 5,
-		shadowColor: '#333',
-		shadowOpacity: 0.1,
-		shadowRadius: 3,
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		backgroundColor: 'white',
-	},
-
-	packageContent: {
-		padding: 5,
-	},
-
-	separator: {
-		borderBottomColor: '#328fcc',
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
-
-	thumbnail: {
-		width: 150,
-		height: 130,
-	},
-
-	packageName: {
-		fontSize: 10,
-	},
-
-	packageSubtitle: {
-		fontSize: 10,
-		color: '#757575',
-	},
-
-	packagePrice: {
-		fontSize: 8,
-		fontWeight: 'bold',
-		marginTop: 10,
-	},
-
 	footerContainer: {
-		width: 1000,
+		width: width,
 		padding: 20,
 		marginTop: 20,
-		backgroundColor: '#3471ae',
+		backgroundColor: '#2196f3',
 	},
 
 	footerText: {
