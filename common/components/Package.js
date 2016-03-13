@@ -66,11 +66,21 @@ class Package extends Component {
 					<View style={styles.pageContent}>
 						<View style={styles.packageInformation}>
 							<Text style={styles.packageInformationText}>
-								Adult Price: AED { this.props.selectedPackage.adult_price }
+								Adult Price: 
+									{ 
+										this.props.selectedPackage.confirm_availability ? 
+										<Text>Upon Request</Text> : 
+										<Text>AED { this.props.selectedPackage.adult_price }</Text>
+									}
 							</Text>
 							<View style={styles.separator} />
 							<Text style={styles.packageInformationText}>
-								Child Price: AED { this.props.selectedPackage.child_price }
+								Child Price: 
+									{ 
+										this.props.selectedPackage.confirm_availability ? 
+										<Text>Upon Request</Text> : 
+										<Text>AED { this.props.selectedPackage.child_price }</Text>
+									}
 							</Text>
 							{ packageInformation }
 						</View>

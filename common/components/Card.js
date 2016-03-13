@@ -39,7 +39,13 @@ class Card extends Component {
 							style={[styles.thumbnail, itemWidth]}/>
 						<View style={styles.cardContent}>
 							<Text style={styles.packageName} numberOfLines={1}>{ this.props.currentPackage.name }</Text>
-							<Text style={styles.packagePrice}>AED { this.props.currentPackage.adult_price }</Text>
+							<Text style={styles.packagePrice}>
+								{ 
+									this.props.currentPackage.confirm_availability ? 
+									<Text>Upon Request</Text> : 
+									<Text>AED { this.props.currentPackage.adult_price }</Text>
+								}
+							</Text>
 						</View>
 					</View>
 				</TouchableHighlight>
