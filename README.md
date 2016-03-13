@@ -1,1 +1,1 @@
-![Alt text](screenshot.png?raw=true "Optional Title")
+![Alt text](new-screenshot.png?raw=true "Optional Title")
